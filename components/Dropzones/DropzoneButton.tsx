@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Text, Group, Button, rem, useMantineTheme } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { IconCloudUpload, IconX, IconDownload } from "@tabler/icons-react";
@@ -8,11 +8,23 @@ export function DropzoneButton() {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
+  const [files, setFiles] = useState<File[]>([]);
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    // Update the state with the accepted files
+    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+
+    // For demonstration, log the files to console
+    acceptedFiles.forEach((file) => {
+      console.log(file);
+    });
+  };
+
   return (
     <div className={classes.wrapper}>
       <Dropzone
         openRef={openRef}
-        onDrop={(files) => console.log("accepted files", files)}
+        onDrop={handleDrop}
         className={classes.dropzone}
         radius="md"
         accept={["audio/*", "video/*"]}
@@ -49,7 +61,7 @@ export function DropzoneButton() {
           </Text>
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
             Drag&apos;n&apos;drop files here to upload. We can accept only{" "}
-            <i>.pdf</i> files that are less than 30mb in size.
+            <i>.mp4 and .mp3</i> files that are less than 30mb in size.
           </Text>
         </div>
       </Dropzone>
@@ -62,6 +74,22 @@ export function DropzoneButton() {
       >
         Select files
       </Button>
+
+      {files.length > 0 && (
+        <div>
+          <h3>Uploaded files</h3>
+          <ul>
+            {files.map((file, index) => (
+              <li key={index}>
+                {file.name}
+                {file.type.startsWith("audio/") && (
+                  <audio controls src={URL.createObjectURL(file)} />
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

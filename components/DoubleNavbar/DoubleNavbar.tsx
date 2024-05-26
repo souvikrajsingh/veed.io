@@ -34,7 +34,7 @@ const linksMockdata = [
 ];
 
 export function DoubleNavbar() {
-  const [active, setActive] = useState("Releases");
+  const [active, setActive] = useState("Home");
   const [activeLink, setActiveLink] = useState("Settings");
 
   const mainLinks = mainLinksMockdata.map((link) => (
