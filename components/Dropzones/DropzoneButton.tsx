@@ -27,7 +27,7 @@ export function DropzoneButton({ setFiles }: DropzoneButtonProps) {
         onDrop={handleDrop}
         className={classes.dropzone}
         radius="md"
-        accept={["audio/*", "video/*"]}
+        accept={["audio/*"]}
         maxSize={30 * 1024 ** 2}
       >
         <div style={{ pointerEvents: "none" }}>

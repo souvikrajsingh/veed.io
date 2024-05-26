@@ -68,15 +68,6 @@ export default function HomePage() {
     open();
   }, [open]);
 
-  const handleFileUpload = (file: File) => {
-    // Handle the uploaded file here
-    console.log(file);
-  };
-
-  const handleDrop = (acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
-  };
-
   return (
     <>
       <Box pr={120}>
@@ -107,7 +98,7 @@ export default function HomePage() {
             </div>
           )}
         </Modal>
-        {/* creating a section for tailwind */}
+        {/* creating a section for Video */}
         <Box m={380}>
           <DropzoneVid setFiles={setVideoFile} />
           {files.length > 0 && (
@@ -118,7 +109,21 @@ export default function HomePage() {
                   <li key={index}>
                     {file.name}
                     {file.type.startsWith("video/") && (
-                      <video controls src={URL.createObjectURL(file)} />
+                      <div>
+                        <video width="320" height="240" controls preload="none">
+                          <source
+                            src={URL.createObjectURL(file)}
+                            type="video/mp4"
+                          />
+                          <track
+                            src="/path/to/captions.vtt"
+                            kind="subtitles"
+                            srcLang="en"
+                            label="English"
+                          />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
                     )}
                   </li>
                 ))}
