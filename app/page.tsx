@@ -39,22 +39,18 @@ export default function HomePage() {
       </Modal>
 
       {/* Display uploaded files */}
-
-      {files.length > 0 && (
-        <div>
-          <h3>Uploaded files</h3>
-          <ul>
-            {files.map((file, index) => (
-              <li key={index}>
-                {file.name}
-                {file.type.startsWith("audio/") && (
-                  <audio controls src={URL.createObjectURL(file)} />
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div>
+        {files.length > 0 && (
+          <div>
+            <h3>Uploaded files</h3>
+            <ul>
+              {files.map((file, index) => (
+                <li key={index}>{file.name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
 
       <ColorSchemeToggle />
     </>

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "7.10.0",
+    "@mantine/core": "^7.10.0",
     "@mantine/dropzone": "^7.10.0",
     "@mantine/hooks": "7.10.0",
     "@mantine/vanilla-extract": "7.10.0",
@@ -33,5 +33,6 @@
     "postcss-preset-mantine": "1.15.0",
     "postcss-simple-vars": "^7.0.1",
     "typescript": "5.4.2"
-  }
+  },
+  "packageManager": "yarn@4.2.2"
 }
