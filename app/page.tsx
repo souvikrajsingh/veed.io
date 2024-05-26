@@ -1,6 +1,6 @@
 "use client";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button } from "@mantine/core";
+import { Modal, Flex, Box, Button } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 
 import { ColorSchemeToggle } from "../components/ColorSchemeToggle/ColorSchemeToggle";
@@ -28,31 +28,54 @@ export default function HomePage() {
 
   return (
     <>
-      <DoubleNavbar />
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Enter a Audio file "
-        centered
-      >
-        <DropzoneButton />
-      </Modal>
+      <Box pr={120}>
+        <ColorSchemeToggle />
+      </Box>
+      <Flex>
+        <DoubleNavbar />
+        <Modal
+          opened={opened}
+          onClose={close}
+          title="Enter a Audio file "
+          centered
+        >
+          <DropzoneButton setFiles={setFiles} />
+          {files.length > 0 && (
+            <div>
+              <h3>Uploaded files</h3>
+              <ul>
+                {files.map((file, index) => (
+                  <li key={index}>
+                    {file.name}
+                    {file.type.startsWith("audio/") && (
+                      <audio controls src={URL.createObjectURL(file)} />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Modal>
 
-      {/* Display uploaded files */}
-      <div>
-        {files.length > 0 && (
-          <div>
-            <h3>Uploaded files</h3>
-            <ul>
-              {files.map((file, index) => (
-                <li key={index}>{file.name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      <ColorSchemeToggle />
+        {/* Display uploaded files */}
+        <Box m={300} p={100}>
+          {files.length > 0 && (
+            <div>
+              <h3>Uploaded files</h3>
+              <ul>
+                {files.map((file, index) => (
+                  <li key={index}>
+                    {file.name}
+                    {file.type.startsWith("audio/") && (
+                      <audio controls src={URL.createObjectURL(file)} />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Box>
+      </Flex>
     </>
   );
 }

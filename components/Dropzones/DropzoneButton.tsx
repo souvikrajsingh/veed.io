@@ -3,18 +3,18 @@ import { Text, Group, Button, rem, useMantineTheme } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { IconCloudUpload, IconX, IconDownload } from "@tabler/icons-react";
 import classes from "./DropzoneButton.module.css";
+// import WaveSurfer from "wavesurfer.js";
 
-export function DropzoneButton() {
+interface DropzoneButtonProps {
+  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+}
+
+export function DropzoneButton({ setFiles }: DropzoneButtonProps) {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
-  const [files, setFiles] = useState<File[]>([]);
-
   const handleDrop = (acceptedFiles: File[]) => {
-    // Update the state with the accepted files
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
-
-    // For demonstration, log the files to console
     acceptedFiles.forEach((file) => {
       console.log(file);
     });
@@ -75,6 +75,7 @@ export function DropzoneButton() {
         Select files
       </Button>
 
+      {/* 
       {files.length > 0 && (
         <div>
           <h3>Uploaded files</h3>
@@ -89,7 +90,7 @@ export function DropzoneButton() {
             ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
