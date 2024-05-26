@@ -10,6 +10,7 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
 
 import { ColorSchemeToggle } from "../components/ColorSchemeToggle/ColorSchemeToggle";
+import { DropzoneVid } from "../components/Dropzones/DropZoneVideo";
 import { DropzoneButton } from "../components/Dropzones/DropzoneButton";
 import { DoubleNavbar } from "../components/DoubleNavbar/DoubleNavbar";
 
@@ -18,6 +19,15 @@ export default function HomePage() {
   const [files, setFiles] = useState<File[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRestart, setIsRestart] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [videoFile, setVideoFile] = useState<File[]>([]);
+
+  function formatTime(seconds: number) {
+    let date = new Date(0);
+    date.setSeconds(seconds);
+    return date.toISOString().substr(11, 8);
+  }
 
   const waveSurferRefs = useRef<(WaveSurfer | null)[]>([]);
 
@@ -26,8 +36,11 @@ export default function HomePage() {
       if (!waveSurferRefs.current[index]) {
         const waveSurfer = WaveSurfer.create({
           container: `#waveform-${index}`,
-          waveColor: "violet",
-          progressColor: "purple",
+          waveColor: "#4F4A85",
+          progressColor: "#383351",
+          barWidth: 4,
+          barGap: 3,
+          barRadius: 2,
           plugins: [
             TimelinePlugin.create({
               container: `#waveform-timeline-${index}`,
@@ -36,6 +49,16 @@ export default function HomePage() {
         });
 
         waveSurfer.loadBlob(file);
+        waveSurferRefs.current[index] = waveSurfer;
+
+        waveSurfer.on("ready", () => {
+          setDuration(waveSurfer.getDuration());
+        });
+
+        waveSurfer.on("audioprocess", () => {
+          setCurrentTime(waveSurfer.getCurrentTime());
+        });
+
         waveSurferRefs.current[index] = waveSurfer;
       }
     });
@@ -84,6 +107,25 @@ export default function HomePage() {
             </div>
           )}
         </Modal>
+        {/* creating a section for tailwind */}
+        <Box m={380}>
+          <DropzoneVid setFiles={setVideoFile} />
+          {files.length > 0 && (
+            <div>
+              <h3>Uploaded files</h3>
+              <ul>
+                {files.map((file, index) => (
+                  <li key={index}>
+                    {file.name}
+                    {file.type.startsWith("video/") && (
+                      <video controls src={URL.createObjectURL(file)} />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Box>
 
         {/* Display uploaded files */}
         {files.length > 0 && (
@@ -142,6 +184,10 @@ export default function HomePage() {
               >
                 <VscDebugRestart />
               </Button>
+              <span>
+                Duration: {formatTime(duration)} | Current Time:{" "}
+                {formatTime(currentTime)}
+              </span>
             </Group>
           </Box>
         )}
